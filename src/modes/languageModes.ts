@@ -18,7 +18,7 @@ import { getCSSMode } from './cssMode';
 import { getJavascriptMode } from './javascriptMode';
 import { getHTMLMode } from './htmlMode';
 import { getVueMode } from './vue/vueMode';
-// import { getVueHTMLMode } from './template/vueHTML';
+import { getVueHTMLMode } from './template/vueHTML';
 
 export interface Settings {
 	css?: any;
@@ -70,7 +70,7 @@ export function getLanguageModes(_ctx: IWorkerContext, supportedLanguages: { [la
 		const jsMode = getJavascriptMode(documentRegions, _ctx);
 		let modes: {[k: string]: LanguageMode} = {
 		  vue: getVueMode(),
-		//   'vue-html': getVueHTMLMode(documentRegions, _ctx, jsMode),
+		  'vue-html': getVueHTMLMode(documentRegions, _ctx, jsMode),
 		  css: getCSSMode(documentRegions),
 		//   postcss: getPostCSSMode(documentRegions),
 		//   scss: getSCSSMode(documentRegions),

@@ -1,19 +1,18 @@
 import { IHTMLTagProvider } from './common';
 import { getHTML5TagProvider } from './htmlTags';
 import { getVueTagProvider } from './vueTags';
-import { getRouterTagProvider } from './routerTags';
+// import { getRouterTagProvider } from './routerTags';
 // import { getElementTagProvider } from './elementTags';
 // import { getOnsenTagProvider } from './onsenTags';
 export { getComponentTags } from './componentTags';
-export { IHTMLTagProvider } from './common';
 
-import * as ts from 'typescript';
+// import * as ts from '../../../lib/typescriptServices';
 // import * as fs from 'fs';
 
 export let allTagProviders : IHTMLTagProvider[] = [
-  getHTML5TagProvider(),
+getHTML5TagProvider(),
   getVueTagProvider(),
-  getRouterTagProvider(),
+//   getRouterTagProvider(),
 //   getElementTagProvider(),
 //   getOnsenTagProvider()
 ];

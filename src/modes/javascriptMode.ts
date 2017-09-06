@@ -301,9 +301,10 @@ export function getJavascriptMode(documentRegions: LanguageModelCache<VueDocumen
 			}
 			return null;
 		},
-		findComponents(doc: TextDocument) {
+		findComponents(document: TextDocument) {
+			updateCurrentTextDocument(document);
 			// const fileFsPath = getFileFsPath(doc.uri);
-			return findComponents(jsLanguageService, doc.uri.toString()); //TODO
+			return findComponents(jsLanguageService, FILE_NAME); //TODO
 		},
 		onDocumentRemoved(document: TextDocument) {
 			jsDocuments.onDocumentRemoved(document);

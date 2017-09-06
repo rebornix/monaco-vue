@@ -6,18 +6,22 @@ import { TextDocument, Position, Range, FormattingOptions } from 'vscode-languag
 import { LanguageMode } from '../languageModes';
 import { VueDocumentRegions } from '../embeddedSupport';
 
-import { HTMLDocument } from './parser/htmlParser';
-import { doComplete } from './services/htmlCompletion';
-import { doHover } from './services/htmlHover';
-import { findDocumentHighlights } from './services/htmlHighlighting';
-import { findDocumentLinks } from './services/htmlLinks';
-import { findDocumentSymbols } from './services/htmlSymbolsProvider';
-// import { htmlFormat } from './services/formatters';
-import { parseHTMLDocument } from './parser/htmlParser';
-// import { doValidation, createLintEngine } from './services/htmlValidation';
-import { getDefaultSetting } from './tagProviders';
+import { HTMLDocument, parseHTMLDocument } from '../template/parser/htmlParser';
+import { doComplete } from '../template/services/htmlCompletion';
+import { doHover } from '../template/services/htmlHover';
+import { findDocumentHighlights } from '../template/services/htmlHighlighting';
+import { findDocumentLinks } from '../template/services/htmlLinks';
+import { findDocumentSymbols } from '../template/services/htmlSymbolsProvider';
+// import { htmlFormat } from './template/services/formatters';
+// import { doValidation, createLintEngine } from './template/services/htmlValidation';
 import { ScriptMode } from '../javascriptMode';
-import { getComponentTags, getBasicTagProviders } from './tagProviders';
+// import { getComponentTags, getBasicTagProviders, getDefaultSetting } from './template/tagProviders';
+import { getComponentTags } from '../template/tagProviders/componentTags';
+import { getBasicTagProviders, getDefaultSetting } from '../template/tagProviders/index';
+
+import { getHTML5TagProvider } from '../template/tagProviders//htmlTags';
+import { getVueTagProvider } from '../template/tagProviders/vueTags';
+
 
 export type DocumentRegionCache = LanguageModelCache<VueDocumentRegions>;
 
@@ -26,8 +30,10 @@ export function getVueHTMLMode(
   _ctx: IWorkerContext,
   scriptMode: ScriptMode): LanguageMode {
   let settings: any = {};
-  let completionOption = getDefaultSetting(null); //TODO
-  let basicTagProviders = getBasicTagProviders(completionOption);
+  let completionOption = { html5: true, vue: true };
+//   let completionOption = getDefaultSetting(null); //TODO
+//   let basicTagProviders = getBasicTagProviders(completionOption);
+  let basicTagProviders = [getHTML5TagProvider(), getVueTagProvider()];
   const embeddedDocuments = getLanguageModelCache<TextDocument>(10, 60, document => documentRegions.get(document).getEmbeddedDocument('vue-html'));
   const vueDocuments = getLanguageModelCache<HTMLDocument>(10, 60, document => parseHTMLDocument(document));
 //   const lintEngine = createLintEngine();
@@ -50,32 +56,32 @@ export function getVueHTMLMode(
       const embedded = embeddedDocuments.get(document);
       const components = scriptMode.findComponents(document);
       const tagProviders = basicTagProviders.concat(getComponentTags(components));
-      return doComplete(embedded, position, vueDocuments.get(embedded), tagProviders);
+	  return doComplete(embedded, position, vueDocuments.get(embedded), tagProviders);
     },
     doHover(document: TextDocument, position: Position) {
       const embedded = embeddedDocuments.get(document);
       const components = scriptMode.findComponents(document);
       const tagProviders = basicTagProviders.concat(getComponentTags(components));
-      return doHover(embedded, position, vueDocuments.get(embedded), tagProviders);
+	  return doHover(embedded, position, vueDocuments.get(embedded), tagProviders);
     },
     findDocumentHighlight(document: TextDocument, position: Position) {
-      return findDocumentHighlights(document, position, vueDocuments.get(document));
+	  return findDocumentHighlights(document, position, vueDocuments.get(document));
     },
     findDocumentLinks(document: TextDocument, documentContext: DocumentContext) {
-      return findDocumentLinks(document, documentContext);
+	  return findDocumentLinks(document, documentContext);
     },
     findDocumentSymbols(document: TextDocument) {
-      return findDocumentSymbols(document, vueDocuments.get(document));
+	  return findDocumentSymbols(document, vueDocuments.get(document));
     },
     format(document: TextDocument, range: Range, formattingOptions: FormattingOptions) {
 	//   return htmlFormat(document, range, formattingOptions);
 		return null;
     },
     onDocumentRemoved(document: TextDocument) {
-      vueDocuments.onDocumentRemoved(document);
+	  vueDocuments.onDocumentRemoved(document);
     },
     dispose() {
-      vueDocuments.dispose();
+	  vueDocuments.dispose();
     }
   };
 }
