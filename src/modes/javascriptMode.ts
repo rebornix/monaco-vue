@@ -15,6 +15,7 @@ import { ComponentInfo, findComponents } from './findComponents';
 import * as ts from '../lib/typescriptServices';
 import { contents as libes6ts } from '../lib/lib-es6-ts';
 import { contents as libdts } from '../lib/lib-ts';
+import { contents as libvue } from '../lib/lib-vue';
 
 const FILE_NAME = 'vscode://javascript/1.js';
 
@@ -26,6 +27,11 @@ const DEFAULT_LIB = {
 const ES6_LIB = {
 	NAME: 'defaultLib:lib.es6.d.ts',
 	CONTENTS: libes6ts
+};
+
+const VUE_LIB = {
+	NAME: 'vue.d.ts',
+	CONTENTS: libvue
 };
 
 const _extraLibs: { [fileName: string]: string } = Object.create(null);
@@ -51,7 +57,7 @@ export function getJavascriptMode(documentRegions: LanguageModelCache<VueDocumen
 	const host: ts.LanguageServiceHost = {
 		getCompilationSettings: () => compilerOptions,
 		getScriptFileNames: () => {
-			return [FILE_NAME];
+			return [FILE_NAME, VUE_LIB.NAME];
 		},
 		getScriptKind: (fileName: string) => ts.ScriptKind.JS,
 		getScriptVersion: (fileName: string) => {
@@ -70,6 +76,8 @@ export function getJavascriptMode(documentRegions: LanguageModelCache<VueDocumen
 				text = DEFAULT_LIB.CONTENTS;
 			} else if (fileName === ES6_LIB.NAME) {
 				text = ES6_LIB.CONTENTS;
+			} else if (fileName === VUE_LIB.NAME) {
+				text = VUE_LIB.CONTENTS;
 			}
 
 			return {
