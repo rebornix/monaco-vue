@@ -18,10 +18,6 @@
   "bugs": {
     "url": "https://github.com/rebornix/monaco-vue/issues"
   },
-  "dependencies": {
-	"element-helper-json": "^1.0.0",
-	"vue-onsenui-helper-json": "^1.0.0"
-  },
   "devDependencies": {
     "event-stream": "^3.3.2",
     "gulp": "^3.9.1",
