@@ -13,6 +13,7 @@ var rjs = require('gulp-requirejs');
 var uglify = require('gulp-uglify');
 var rimraf = require('rimraf');
 var es = require('event-stream');
+var httpServer = require('http-server');
 
 gulp.task('clean-release', function(cb) { rimraf('release', { maxBusyTries: 1 }, cb); });
 gulp.task('release', ['clean-release','compile'], function() {
@@ -127,6 +128,11 @@ gulp.task('compile', ['clean-out'], compileTask);
 gulp.task('compile-without-clean', compileTask);
 gulp.task('watch', ['compile'], function() {
 	gulp.watch(tsSources, ['compile-without-clean']);
+});
+gulp.task('simpleserver', function(cb) {
+	httpServer.createServer({ root: './', cache: 5 }).listen(4000);
+	// httpServer.createServer({ root: './', cache: 5 }).listen(8088);
+	console.log('Server address: http://127.0.0.1:4000/');
 });
 
 
