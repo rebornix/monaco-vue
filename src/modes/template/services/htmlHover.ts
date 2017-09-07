@@ -1,7 +1,7 @@
 import { HTMLDocument } from '../parser/htmlParser';
 import { TokenType, createScanner } from '../parser/htmlScanner';
 import { TextDocument, Range, Position, Hover, MarkedString } from 'vscode-languageserver-types';
-import { IHTMLTagProvider } from '../tagProviders';
+import { IHTMLTagProvider } from '../tagProviders/common';
 import { NULL_HOVER } from '../../nullMode';
 
 const TRIVIAL_TOKEN = [

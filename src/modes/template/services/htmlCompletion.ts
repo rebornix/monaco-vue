@@ -10,7 +10,7 @@ import {
 } from 'vscode-languageserver-types';
 import { HTMLDocument } from '../parser/htmlParser';
 import { TokenType, createScanner, ScannerState } from '../parser/htmlScanner';
-import { IHTMLTagProvider } from '../tagProviders';
+import { IHTMLTagProvider } from '../tagProviders/common';
 // import * as emmet from 'vscode-emmet-helper';
 
 export function doComplete(

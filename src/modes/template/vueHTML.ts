@@ -15,13 +15,8 @@ import { findDocumentSymbols } from '../template/services/htmlSymbolsProvider';
 // import { htmlFormat } from './template/services/formatters';
 // import { doValidation, createLintEngine } from './template/services/htmlValidation';
 import { ScriptMode } from '../javascriptMode';
-// import { getComponentTags, getBasicTagProviders, getDefaultSetting } from './template/tagProviders';
 import { getComponentTags } from '../template/tagProviders/componentTags';
 import { getBasicTagProviders, getDefaultSetting } from '../template/tagProviders/index';
-
-import { getHTML5TagProvider } from '../template/tagProviders//htmlTags';
-import { getVueTagProvider } from '../template/tagProviders/vueTags';
-
 
 export type DocumentRegionCache = LanguageModelCache<VueDocumentRegions>;
 
@@ -30,10 +25,9 @@ export function getVueHTMLMode(
   _ctx: IWorkerContext,
   scriptMode: ScriptMode): LanguageMode {
   let settings: any = {};
-  let completionOption = { html5: true, vue: true };
+  let completionOption = { html5: true, vue: true, router: true };
 //   let completionOption = getDefaultSetting(null); //TODO
-//   let basicTagProviders = getBasicTagProviders(completionOption);
-  let basicTagProviders = [getHTML5TagProvider(), getVueTagProvider()];
+  let basicTagProviders = getBasicTagProviders(completionOption);
   const embeddedDocuments = getLanguageModelCache<TextDocument>(10, 60, document => documentRegions.get(document).getEmbeddedDocument('vue-html'));
   const vueDocuments = getLanguageModelCache<HTMLDocument>(10, 60, document => parseHTMLDocument(document));
 //   const lintEngine = createLintEngine();

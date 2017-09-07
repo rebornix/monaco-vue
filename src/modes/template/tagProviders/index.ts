@@ -1,20 +1,18 @@
 import { IHTMLTagProvider } from './common';
 import { getHTML5TagProvider } from './htmlTags';
 import { getVueTagProvider } from './vueTags';
-// import { getRouterTagProvider } from './routerTags';
-// import { getElementTagProvider } from './elementTags';
-// import { getOnsenTagProvider } from './onsenTags';
+import { getRouterTagProvider } from './routerTags';
+import { getElementTagProvider } from './elementTags';
 export { getComponentTags } from './componentTags';
 
 // import * as ts from '../../../lib/typescriptServices';
 // import * as fs from 'fs';
 
 export let allTagProviders : IHTMLTagProvider[] = [
-getHTML5TagProvider(),
+  getHTML5TagProvider(),
   getVueTagProvider(),
-//   getRouterTagProvider(),
-//   getElementTagProvider(),
-//   getOnsenTagProvider()
+  getRouterTagProvider(),
+  getElementTagProvider()
 ];
 
 export interface CompletionConfiguration {
@@ -33,8 +31,7 @@ export function getDefaultSetting(workspacePath: string | null | undefined) {
     html5: true,
     vue: true,
     router: false,
-    element: false,
-    onsen: false
+    element: false
   };
   if (!workspacePath) {
     return setting;

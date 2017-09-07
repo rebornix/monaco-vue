@@ -6,3 +6,4 @@
 /release/dev/
 /gulpfile.js
 /.npmignore
+.DS_Store
