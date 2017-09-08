@@ -35,9 +35,22 @@
 <script>
 	require([
 		'vs/editor/editor.main',
+		'vs/language/typescript/src/monaco.contribution',
 		'vs/language/vue/monaco.contribution',
 		'Vue'
-	], function(m, v, Vue) {
+	], function(m, t, v, Vue) {
+		monaco.editor.defineTheme('vue', {
+			base: 'vs', // can also be vs-dark or hc-black
+			inherit: true, // can also be false to completely replace the builtin rules
+			rules: [
+				{ token: 'tag.html', foreground: '2973b7'},
+				{ token: 'attribute.name.html', foreground: '2973b7'},
+				{ token: 'attribute.value.html', foreground: '42b983'},
+				{ token: 'keyword', foreground: 'e96900'},
+				{ token: 'string', foreground: '42b983'}
+			]
+		});
+
 		var model = monaco.editor.createModel(
 			['<template>',
 			'	<div class="hello">Hello {{who}}</div>',
@@ -69,7 +82,7 @@
 				'my-component': httpVueLoader(model.getValue(), 'my-component')
 			}
 		});
-		var editor = monaco.editor.create(document.getElementById('container'), { model: model });
+		var editor = monaco.editor.create(document.getElementById('container'), { model: model, theme: 'vue' });
 
 		editor.onDidChangeModelContent(function () {
 			document.getElementById('my-app').innerHTML = "<my-component></my-component>";
