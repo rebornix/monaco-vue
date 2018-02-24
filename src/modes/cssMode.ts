@@ -9,6 +9,12 @@ import { TextDocument, Position } from 'vscode-languageserver-types';
 import { getCSSLanguageService, Stylesheet } from 'vscode-css-languageservice';
 import { LanguageMode, Settings } from './languageModes';
 import { VueDocumentRegions, CSS_STYLE_RULE } from './embeddedSupport';
+import * as emmet from './template/services/emmetHelper';
+
+export enum Priority {
+	Emmet,
+	Platform
+}
 
 export function getCSSMode(documentRegions: LanguageModelCache<VueDocumentRegions>): LanguageMode {
     let cssLanguageService = getCSSLanguageService();
@@ -27,7 +33,34 @@ export function getCSSMode(documentRegions: LanguageModelCache<VueDocumentRegion
 		},
 		doComplete(document: TextDocument, position: Position) {
 			let embedded = embeddedCSSDocuments.get(document);
-			return cssLanguageService.doComplete(embedded, position, cssStylesheets.get(embedded));
+			const emmetSyntax = embedded.languageId === 'postcss' ? 'css' : embedded.languageId;
+			const emmetCompletions = emmet.doComplete(document, position, emmetSyntax, {
+				showExpandedAbbreviation: 'always',
+				showAbbreviationSuggestions: true,
+				syntaxProfiles: {},
+				variables: {},
+				preferences: {}				
+			});
+			const emmetItems = emmetCompletions.items.map(i => {
+				return {
+				  ...i,
+				  sortText: Priority.Emmet + i.label
+				};
+			})
+			
+			const lsCompletions = cssLanguageService.doComplete(embedded, position, cssStylesheets.get(embedded));
+			
+			const lsItems = lsCompletions ? lsCompletions.items.map(i => {
+				return {
+				  ...i,
+				  sortText: Priority.Platform + i.label
+				};
+			  }) : [];
+		
+			return {
+				isIncomplete: true,
+				items: emmetItems.concat(lsItems)
+			};
 		},
 		doHover(document: TextDocument, position: Position) {
 			let embedded = embeddedCSSDocuments.get(document);
