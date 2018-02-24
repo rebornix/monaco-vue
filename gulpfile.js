@@ -117,7 +117,7 @@ var tsSources = 'src/**/*.ts';
 
 function compileTask() {
 	return merge(
-		gulp.src('src/lib/*.js', { base: './src' }),
+		gulp.src('src/lib/**/*.js', { base: './src' }),
 		gulp.src(tsSources).pipe(compilation())
 	)
 	.pipe(gulp.dest('out'));

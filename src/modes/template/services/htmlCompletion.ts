@@ -11,7 +11,7 @@ import {
 import { HTMLDocument } from '../parser/htmlParser';
 import { TokenType, createScanner, ScannerState } from '../parser/htmlScanner';
 import { IHTMLTagProvider } from '../tagProviders/common';
-// import * as emmet from 'vscode-emmet-helper';
+import * as emmet from './emmetHelper';
 
 export function doComplete(
   document: TextDocument,
@@ -278,13 +278,14 @@ export function doComplete(
         break;
       default:
         if (offset <= scanner.getTokenEnd()) {
-        //   return emmet.doComplete(document, position, 'html', {
-        //     useNewEmmet: true,
-        //     showExpandedAbbreviation: true,
-        //     showAbbreviationSuggestions: true,
-        //     syntaxProfiles: {},
-        //     variables: {}
-        //   });
+          return emmet.doComplete(document, position, 'html', {
+            // useNewEmmet: true,
+            showExpandedAbbreviation: 'always',
+            showAbbreviationSuggestions: true,
+            syntaxProfiles: {},
+            variables: {},
+            preferences: {}
+          });
         }
         break;
     }
