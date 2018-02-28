@@ -1,6 +1,6 @@
 {
   "name": "monaco-vue",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Vue plugin for the Monaco Editor",
   "scripts": {
     "compile": "gulp compile",
